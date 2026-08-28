@@ -1,0 +1,445 @@
+/* Full-viewport chapter overlay. Position/size are animated by motion.js
+   (FLIP zoom); everything inside scrolls in its own container. */
+
+.chapter {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.chapter[hidden] { display: none; }
+
+.chapter__scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* sticky chapter bar */
+
+.chapter__bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px var(--pad-x);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--bg-translucent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.chapter__bar-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+
+.chapter__progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  width: 0%;
+}
+
+.chapter__close {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  background: var(--card);
+  border: 1px solid var(--hairline-strong);
+  padding: 8px 16px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.chapter__close:hover,
+.chapter__close:focus-visible { background: var(--ink); color: #fff; }
+
+.chapter__close .esc { opacity: 0.5; }
+
+/* cover */
+
+.chapter__cover {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px var(--pad-x) 56px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* accent wash: fades in with the zoom (motion.js animates opacity) */
+.chapter__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--bg) 30%, var(--tint));
+  pointer-events: none;
+}
+
+.chapter__ghost,
+.chapter__cover-inner { z-index: 1; }
+
+.chapter__ghost {
+  position: absolute;
+  top: 6vh;
+  right: var(--pad-x);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--size-ghost);
+  line-height: 1;
+  color: var(--grid-line);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.chapter__cover-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+.chapter__title {
+  font-weight: 700;
+  font-size: var(--size-h2);
+  line-height: 0.96;
+  margin: 0 0 36px;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  max-width: 1050px;
+  will-change: transform;
+}
+
+.chapter__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+  border-top: 1px solid var(--hairline-strong);
+  max-width: 1000px;
+}
+
+.chapter__meta-cell { padding: 18px 20px 0 0; }
+.chapter__meta-cell .mono-label { margin-bottom: 6px; }
+.chapter__meta-cell div:last-child { font-size: 14px; font-weight: 500; }
+
+/* body sections */
+
+.chapter__body {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  padding: var(--section-pad) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.section__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.section--roads { display: block; }
+
+.section--roads .section__head {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+.section p.lead {
+  font-size: var(--size-lead);
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 20px;
+}
+
+.section p.body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0;
+  max-width: 740px;
+}
+
+.section .context-wrap { max-width: 740px; }
+
+/* roads-not-taken sticky stack */
+
+.roads { display: grid; gap: 20px; }
+
+.road {
+  position: sticky;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: minmax(110px, max-content) 1fr 200px;
+  gap: 28px;
+  align-items: start;
+  box-shadow: 0 -12px 32px -24px #0d111730;
+}
+
+.road--shipped { border-color: var(--accent); }
+
+.road__status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 5px 10px;
+  border: 1px solid var(--muted);
+  color: var(--muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.road--shipped .road__status {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.road__name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  letter-spacing: -0.015em;
+}
+
+.road__why {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+.road__call {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+  border-left: 1px solid var(--hairline);
+  padding-left: 20px;
+}
+
+.road__call span { color: var(--ink); }
+
+/* demo container shell (shared) */
+
+.demo-shell {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  padding: 40px 32px;
+}
+
+.demo-caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* AI notes */
+
+.ai-notes { display: grid; gap: 14px; max-width: 780px; }
+
+.ai-note {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 24px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px;
+}
+
+.ai-note__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+}
+
+.ai-note p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* my call vs team */
+
+.calls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 40px;
+  max-width: 900px;
+}
+
+.calls__col-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  margin-bottom: 16px;
+}
+
+.calls__col-label--mine { color: var(--accent-text); }
+.calls__col-label--team { color: var(--muted); }
+
+.calls__list { display: grid; gap: 12px; }
+
+.calls__list p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 12px;
+}
+
+.calls__list--team p { color: var(--muted); }
+
+/* results */
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.result {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  padding: 28px;
+}
+
+.result__n {
+  font-weight: 700;
+  font-size: var(--size-stat);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent-text);
+}
+
+.result__label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.hindsight {
+  font-size: var(--size-hindsight);
+  line-height: 1.5;
+  font-weight: 500;
+  margin: 0;
+  max-width: 700px;
+}
+
+/* footer row */
+
+.chapter__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--hairline);
+  padding: 32px 0 64px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.chapter__back {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  background: var(--card);
+  border: 1px solid var(--hairline-strong);
+  padding: 14px 24px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.chapter__back:hover,
+.chapter__back:focus-visible { background: var(--ink); color: #fff; }
+
+.chapter__next {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  background: var(--ink);
+  color: #fff;
+  border: 1px solid var(--ink);
+  padding: 14px 24px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.chapter__next:hover,
+.chapter__next:focus-visible { background: var(--card); color: var(--ink); }
+
+/* reveal initial state (JS sets .is-revealed) */
+
+.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-reveal), transform 0.8s var(--ease-reveal);
+}
+
+.js-anim [data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* responsive stacking */
+
+@media (max-width: 860px) {
+  .section,
+  .section--roads .section__head {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .road {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 24px;
+  }
+
+  .road__status { justify-self: start; }
+
+  .road__call {
+    border-left: none;
+    border-top: 1px solid var(--hairline);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+
+  .ai-note { grid-template-columns: 1fr; gap: 10px; }
+
+  .demo-shell { padding: 20px; }
+
+  .chapter__ghost { top: 10vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter__close,
+  .chapter__back,
+  .chapter__next { transition: none; }
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rock Gomes · Portfolio Presentation</title>
+  <meta name="description" content="Decisions, shown working. Two case studies with live interactive demos from Rock Gomes, Senior Product Designer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <canvas class="grid-glow" aria-hidden="true"></canvas>
+
+  <nav class="nav">
+    <span class="nav__name">ROCK GOMES</span>
+    <span class="nav__meta">PORTFOLIO / CASE_STUDIES / 2026</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="hero__chips" data-hero="chips">
+        <span class="chip">SENIOR PRODUCT DESIGNER</span>
+        <span class="chip">2 CASE STUDIES + LIVE DEMOS</span>
+        <span class="chip">BUILT IN CODE, AI IN THE LOOP</span>
+      </div>
+      <h1 class="hero__title">
+        <span class="hero__line"><span class="hero__line-inner" data-hero="line">Decisions,</span></span>
+        <span class="hero__line"><span class="hero__line-inner" data-hero="line">shown<span class="hero__underscore" data-hero="underscore">_</span>working</span></span>
+      </h1>
+      <div class="hero__strip" data-hero="strip">
+        <div class="hero__cell">
+          <div class="mono-label">BACKGROUND</div>
+          <p>Product designer since 2013, based in Tallinn. Sales intelligence at Dealfront, CRM integrations at Pipedrive, lending platforms at Inbank and Bigbank.</p>
+        </div>
+        <div class="hero__cell">
+          <div class="mono-label">METHOD</div>
+          <p>Research, design and testing run side by side, not one after another. Interviews continue through the build, not only before it.</p>
+        </div>
+        <div class="hero__cell">
+          <div class="mono-label">FORMAT</div>
+          <p>Key interactions rebuilt as working prototypes. Click a chapter to zoom in.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="index" aria-label="Chapter index">
+    <div class="index__head">
+      <span class="mono-label mono-label--wide">INDEX / CLICK TO ZOOM</span>
+      <span class="index__count mono-label"></span>
+    </div>
+    <div class="index__grid" id="chapter-cards"></div>
+  </section>
+
+  <section class="closing">
+    <div class="mono-label mono-label--wide closing__label">CLOSING</div>
+    <p class="closing__statement">This document is itself the third case study: designed and built in code, <span class="closing__accent">with AI in the loop.</span></p>
+    <div class="closing__links">
+      <a class="btn-link" href="mailto:rock@rockgomes.com">ROCK@ROCKGOMES.COM</a>
+      <a class="btn-link" href="https://www.rockgomes.com" target="_blank" rel="noopener">PORTFOLIO ↗</a>
+      <a class="btn-link" href="https://www.linkedin.com/in/rockgomes/" target="_blank" rel="noopener">LINKEDIN ↗</a>
+    </div>
+  </section>
+
+  <div class="chapter" id="chapter-overlay" role="dialog" aria-modal="true" aria-label="Case study" hidden></div>
+
+</body>
+</html>
