@@ -5,5 +5,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    # Only Rock's portfolio may show this site in a frame (its case study page shows the live demo).
+    # *.netlify.app covers the portfolio's deploy previews, localhost covers local work.
+    Content-Security-Policy = "frame-ancestors 'self' https://rockgomes.com https://www.rockgomes.com https://*.netlify.app http://localhost:*"
     X-Content-Type-Options = "nosniff"
